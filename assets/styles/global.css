@@ -1,0 +1,14 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer utilities {
+    .wrapper {
+        @apply flex-1 bg-black text-white;
+    }
+    .text-body {
+        @apply text-white text-lg;
+    }
+}
