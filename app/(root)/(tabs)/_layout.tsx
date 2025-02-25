@@ -1,5 +1,6 @@
 import FloatingPlayer from "@/components/FloatingPlayer";
 import { colors, fontSizes } from "@/constants/tokens";
+import { TrackPlayerProvider } from "@/providers/TrackPlayerContext";
 import { FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
@@ -7,7 +8,7 @@ import { StyleSheet, View } from "react-native";
 
 const TabsNavigation = () => {
     return (
-        <>
+        <TrackPlayerProvider>
             <Tabs screenOptions={{
                 tabBarActiveTintColor: colors.primary,
                 tabBarLabelStyle: {
@@ -51,16 +52,9 @@ const TabsNavigation = () => {
                 }} />
             </Tabs>
             <View className="absolute bottom-[60px] left-2 right-2">
-                <FloatingPlayer track={{
-                    id: "1",
-                    artist: "Some Artist",
-                    album: "Some Album",
-                    duration: 0,
-                    url: "",
-                    title: "Some Track",
-                }} />
+                <FloatingPlayer />
             </View>
-        </>
+        </TrackPlayerProvider>
     );
 }
 

@@ -8,11 +8,23 @@ export type TrackListProps = Partial<FlatListProps<Track>> & {
 };
 
 export const TrackList = ({ tracks, ...flatListProps }: TrackListProps) => {
-    const { loadTrack } = useTrackPlayer();
+    const {
+        loadTrack,
+        trackPlayer,
+        stopTrack,
+        track: loadedTrack,
+        togglePausePlay,
+    } = useTrackPlayer();
 
     const handleTrackPress = async (track: Track) => {
+        if (track.url === loadedTrack?.url) {
+            togglePausePlay();
+            return;
+        };
+        if (trackPlayer) {
+            stopTrack();
+        }
         loadTrack(track);
-        console.log('Track pressed:', track);
     };
 
     return (

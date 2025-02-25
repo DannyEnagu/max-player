@@ -1,7 +1,9 @@
 import { unknownTrackImageUri } from "@/constants/images";
+import { useActiveTrack, useTrackPlayer } from "@/hooks/useTrackPlayer";
 import { Track } from "@/types/track";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import { TouchableHighlight, View, Text, Image } from "react-native";
+import { BarIndicator } from 'react-native-indicators';
 
 type TrackListItemProps = {
     track: Track;
@@ -9,7 +11,8 @@ type TrackListItemProps = {
 };
 
 export const TrackListItem = ({ track, onTrackPress: handleTrackPress }: TrackListItemProps) => {
-    const isActiveTrack = false;
+    const { isPlaying } = useTrackPlayer();
+    const isActiveTrack = useActiveTrack()?.url === track.url;
 
     return (
         <TouchableHighlight onPress={() => handleTrackPress(track)}>
@@ -19,6 +22,20 @@ export const TrackListItem = ({ track, onTrackPress: handleTrackPress }: TrackLi
                         source={{ uri: track.artwork ?? unknownTrackImageUri }}
                         className={`rounded-lg w-[50px] h-[50px] ${isActiveTrack ? 'opacity-60' : 'opacity-100'}`}
                     />
+                    {isActiveTrack && (isPlaying
+                        ? (<BarIndicator
+                                color="white"
+                                className="absolute top-[18px] left-5 h-4 w-4"
+                                size={16}
+                                count={5}
+                            />)
+                        : (<Ionicons
+                                name="play"
+                                size={24}
+                                color="white"
+                                className="absolute top-[14px] left-[14px]"
+                            />)
+                    )}
                 </View>
                 <View className="flex-1">
                     <Text className={`text-sm font-semibold max-w-[90%] ${isActiveTrack ? 'text-primary-500' : 'text-white'}`}>{track.title}</Text>
