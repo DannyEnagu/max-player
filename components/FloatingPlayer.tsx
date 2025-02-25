@@ -1,17 +1,19 @@
 import { unknownTrackImageUri } from '@/constants/images';
-import { Track } from '@/types/track';
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { PlayPauseButton, SkipToNext } from './PlayerControls';
+import { useTrackPlayer } from '@/hooks/useTrackPlayer';
+import { useLastActiveTrack } from '@/hooks/useLastActiveTrack';
+import MovingText from './MovingText';
 
-interface FloatingPlayerProps {
-    track: Track;
-}
 
-const FloatingPlayer = ({ track } : FloatingPlayerProps) => {
-    const [isPlaying, setIsPlaying] = React.useState(true);
+const FloatingPlayer = () => {
+    const { track } = useTrackPlayer();
+    const lastActiveTrack = useLastActiveTrack();
 
-    if (!isPlaying) return null;
+    const currentTrack = track ?? lastActiveTrack;
+
+    if (!currentTrack) return null;
 
     return (
         <TouchableOpacity
@@ -20,18 +22,18 @@ const FloatingPlayer = ({ track } : FloatingPlayerProps) => {
         >
             <>
                 <Image
-                    source={{ uri: track.artwork ?? unknownTrackImageUri }}
+                    source={{ uri: currentTrack?.artwork ?? unknownTrackImageUri }}
                     className="w-[40px] h-[40px] rounded-lg"
                 />
                 <View className="flex-1 overflow-hidden ml-3">
-                    <Text className="text-white font-semibold text-lg pl-3">
-                        {track.title}
-                    </Text>
+                    <MovingText
+                        text={currentTrack?.title ?? ''}
+                        className="text-white font-semibold text-lg pl-3"
+                        animationThreshold={25}
+                    />
                 </View>
                 <View className="flex flex-row items-center gap-x-5 mr-4 pl-4">
                     <PlayPauseButton
-                        // isPlaying={isPlaying}
-                        // onPress={() => setIsPlaying(!isPlaying)}
                         iconSize={24}
                     />
                     <SkipToNext iconSize={22} />

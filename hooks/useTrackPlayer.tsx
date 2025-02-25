@@ -9,3 +9,8 @@ export const useTrackPlayer = () => {
     }
     return context;
 }
+
+export const useActiveTrack = () => {
+    const { track } = useTrackPlayer();
+    return track;
+}
